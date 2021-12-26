@@ -10,7 +10,7 @@
 rice-pkg-installer [FILENAME]
 ```
 
-# Test Without Installing
+# Test the program
 ```bash
 git clone https://github.com/LukasDoesDev/rice-pkg-installer
 cd rice-pkg-installer
