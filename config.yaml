@@ -1,0 +1,270 @@
+# Install selected packages
+packages:
+  - name: i3
+    modules:
+      - type: aur
+        packages:
+          - i3lock
+          - i3exit
+      - type: pacman
+        packages:
+          - i3-gaps
+          - i3status
+          - flameshot
+          - dex
+          - network-manager-applet
+  - name: music
+    modules:
+      - type: pacman
+        packages:
+          - ncmpcpp
+          - mpd
+          - mpc
+  - name: minecraft
+    modules:
+      - type: aur
+        packages:
+          - minecraft-launcher
+  - name: multimc
+    modules:
+      - type: aur
+        packages:
+          - multimc5
+  - name: java
+    modules:
+      - type: pacman
+        packages:
+          - jdk-openjdk
+          - jre-openjdk
+          - jre-openjdk-headless
+  - name: programming
+    modules:
+      - type: aur
+        packages:
+          - vscodium-bin
+      - type: pacman
+        packages:
+          - python3
+          - python-pip
+          - elixir
+          - rustup
+          - neovim
+  - name: rice screenshot aka l33t h4xx0r
+    modules:
+      # ttf-ubraille required for bottom
+      - type: aur
+        packages:
+          - cava
+          - pipes.sh
+          - ttf-ubraille
+          - pfetch
+          - nerdfetch
+          - cpufetch
+      - type: pacman
+        packages:
+          - cmatrix
+          - neofetch
+          - bottom
+          - htop
+          - duf
+          - bpytop
+  - name: docker
+    modules:
+      - type: pacman
+        packages:
+          - ctop
+          - docker
+          - docker-compose
+  - name: steam + amdgpu
+    modules:
+      # mesa lib32-mesa
+      #vulkan-radeon seems to be better than amdvlk, see https://linuxreviews.org/The_Best_Linux_Vulkan_Driver_For_AMD_GPUs:_Mesa_RADV_vs_AMDVLK
+      - type: pacman
+        packages:
+          - vulkan-radeon
+          - lib32-vulkan-radeon
+          - lib32-fontconfig
+          - steam
+  - name: scripting
+    modules:
+      - type: pacman
+        packages:
+          - fzf
+          - jq
+          - grep
+          - tree
+          - wget
+          - curl
+          - xdotool
+  - name: tuxi
+    modules:
+      - type: aur
+        packages:
+          - pup
+          - tuxi-git
+      - type: pacman
+        packages:
+          - jq
+          - recode
+  - name: nerd-dictation
+    modules:
+      - type: pacman
+        packages:
+          - python
+          - python-pip
+      - type: script
+        lines:
+          # exit if an command errors
+          - set -e
+          # keep track of the last executed command
+          - trap 'last_command=$current_command; current_command=$BASH_COMMAND' DEBUG
+          # echo an error message before exiting
+          - trap 'echo "\"${last_command}\" command failed with exit code $?."' EXIT
+
+          - 'if [ ! -d "~/dev/nerd-dictation" ] ; then'
+          - mkdir -pv ~/dev/
+          - cd ~/dev/
+          - pip3 install vosk
+          - git clone https://github.com/ideasman42/nerd-dictation.git
+          - "fi"
+
+          - 'if [ ! -d "~/.config/nerd-dictation/model" ] ; then'
+          - cd /tmp
+          - wget https://alphacephei.com/kaldi/models/vosk-model-small-en-us-0.15.zip
+          - unzip vosk-model-small-en-us-0.15.zip
+          - mkdir -pv ~/.config/nerd-dictation
+          - mv vosk-model-small-en-us-0.15 ~/.config/nerd-dictation
+          - "fi"
+  - name: youtube
+    modules:
+      - type: aur
+        packages:
+          - youtube-viewer
+      - type: pacman
+        packages:
+          - youtube-dl
+  - name: system monitor
+    modules:
+      # ttf-ubraille required for bottom
+      - type: aur
+        packages:
+          - icdiff
+          - ttf-ubraille
+      - type: pacman
+        packages:
+          - bottom
+          - htop
+          - tcpdump
+          - duf
+          - bpytop
+  - name: system administration
+    modules:
+      # ttf-ubraille required for bottom
+      - type: aur
+        packages:
+          - icdiff
+          - ttf-ubraille
+      - type: pacman
+        packages:
+          - grep
+          - man-db
+          - tree
+          - unzip
+          - zip
+          - pandoc
+          - neovim
+          - bc
+          #- highlight
+          - bat
+          - bind
+  - name: network utilities
+    modules:
+      - type: pacman
+        packages:
+          - rsync
+          - wget
+          - curl
+          - nmap
+          - bind
+          - websocat
+          - openbsd-netcat
+  - name: ntfs
+    modules:
+      - type: pacman
+        packages:
+          - ntfs-3g
+  - name: desktop applications
+    modules:
+      - type: pacman
+        packages:
+          - audacity
+          - firefox
+          - nemo
+          - discord
+          - gimp
+          - inkscape
+          - sxiv
+          - zathura
+          - xdg-utils
+          - xdg-user-dirs
+          - mpv
+      - type: script
+        lines:
+          - xdg-mime default nemo.desktop inode/directory
+  - name: custom dwm
+    modules:
+      - type: pacman
+        packages:
+          - base-devel
+          - git
+          - libx11
+          - libxinerama
+          - libxft
+      - type: script
+        lines:
+          - mkdir -pv ~/dev/rice
+          - cd ~/dev/rice
+          - git clone https://github.com/LukasDoesDev/dwm-build-scripts.git
+          - cd dwm-build-scripts
+          - "./full.sh install"
+  - name: custom dmenu
+    modules:
+      - type: script
+        lines:
+          - mkdir -pv ~/dev/rice
+          - cd ~/dev/rice
+          - git clone https://github.com/LukasDoesDev/dmenu.git
+          - cd dmenu
+          - sudo make clean install
+  - name: xorg + required
+    modules:
+      - type: pacman
+        packages:
+          - xorg
+          - xorg-xinit
+          - xorg-xrandr
+          - xorg-xrdb
+          - webkit2gtk
+          - dunst
+          - feh
+          - picom
+          - flameshot
+          - rxvt-unicode
+          - pulseaudio
+          - ttf-liberation
+  - name: crypto
+    modules:
+      - type: aur
+        packages:
+          - cointop-bin
+  - name: nvim plug
+    modules:
+      - type: script
+        lines:
+          - curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
+            https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  - name: Test Script
+    modules:
+      - type: script
+        lines:
+          - curl https://lipsum.com/feed/json | jq .feed.lipsum -r
