@@ -1,3 +1,5 @@
+# Moved to [GitLab](https://gitlab.com/LukasDoesDev/rice-pkg-installer)
+
 # Rice Package Installer
 
 > This program can install packages from lists.
